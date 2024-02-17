@@ -5,7 +5,7 @@
 
 /**
  * Casillas en la que almacenaremos los datos de la tabla hash.
- */
+   */
 typedef struct {
   void *dato;
   int eliminado;
@@ -54,7 +54,7 @@ TablaHash tablahash_crear(unsigned capacidad, FuncionCopiadora copia,
 
 
 void tablahash_resize(TablaHash tabla){
-  int nueva_capacidad = tabla->capacidad*2;
+  unsigned int nueva_capacidad = tabla->capacidad*2;
   CasillaHash *old_array = tabla->elems;
 
   tabla->capacidad = nueva_capacidad;
@@ -68,7 +68,7 @@ void tablahash_resize(TablaHash tabla){
   }
 
   // Insertamos nuevamente sus elementos iniciales en el nuevo almacenamiento de la tabla hash
-  for(unsigned idx = 0; idx < nueva_capacidad/2; idx++){
+  for(unsigned int idx = 0; idx < nueva_capacidad/2; idx++){
     if(old_array[idx].dato!=NULL && !old_array[idx].eliminado)    
       tablahash_insertar(tabla, old_array[idx].dato);
     // En caso de existir un elemento, lo destruimos
@@ -106,6 +106,41 @@ void tablahash_destruir(TablaHash tabla) {
 }
 
 
+void colision_manage(TablaHash tabla, int idx, void *dato){  
+  // Tendremos que buscar la primer casilla libre a la que acudir para insertar el dato.
+  // Es decir:
+  // Que el dato sea ==NULL
+  // Que el dato haya sido eliminado
+  // Que hayamos encontrado un dato igual al que ingresar
+  int first_deleted = idx;
+
+  for(;tabla->elems[idx].eliminado ||
+  (tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)!=0);
+  idx = (idx + 1) % tabla->capacidad)
+  {
+    if(tabla->elems[first_deleted].dato && !tabla->elems[idx].dato)
+      first_deleted = idx;
+  }
+  
+  // Si la casilla es no nula y el dato ya existía
+  if(tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)==0){
+    tabla->destr(tabla->elems[idx].dato);
+    tabla->elems[idx].dato = tabla->copia(dato);
+  }
+  // Si existe una casilla eliminada en el cluster    
+  else if(tabla->elems[first_deleted].eliminado){
+    tabla->elems[first_deleted].dato = tabla->copia(dato);
+    tabla->numElems++;
+  } 
+  // Encontramos una celda nula
+  else{
+    tabla->numElems++;
+    tabla->elems[idx].dato = tabla->copia(dato);
+  }
+  
+  tabla->elems[idx].eliminado = 0;
+}
+
 /**
  * Inserta un dato en la tabla, o lo reemplaza si ya se encontraba.
  */
@@ -130,41 +165,7 @@ void tablahash_insertar(TablaHash tabla, void *dato) {
   }
   // En caso de haber colisiones, haremos el linear probing
   else {
-
-    // Tendremos que buscar la primer casilla libre a la que acudir para insertar el dato.
-    // Es decir:
-    // Que el dato sea ==NULL
-    // Que el dato haya sido eliminado
-    // Que hayamos encontrado un dato igual al que ingresar
-    int first_deleted = idx;
-
-    for(int limit=0;
-    limit<tabla->capacidad && 
-    (tabla->elems[idx].eliminado ||
-    (tabla->elems[idx].dato != NULL && tabla->comp(tabla->elems[idx].dato,dato)!=0));
-    idx = (idx + 1) % tabla->capacidad, limit++){
-      if(tabla->elems[first_deleted].dato!=NULL && tabla->elems[idx].dato==NULL)
-        first_deleted = idx;
-    }
-    
-    // Si la casilla es no nula y el dato ya existía
-    if(tabla->elems[idx].dato!=NULL && tabla->comp(tabla->elems[idx].dato,dato)==0){
-      tabla->destr(tabla->elems[idx].dato);
-      tabla->elems[idx].dato = tabla->copia(dato);
-    }
-    // Si existe una casilla eliminada en el cluster
-    else if(tabla->elems[first_deleted].eliminado){
-      tabla->elems[first_deleted].dato = tabla->copia(dato);
-      tabla->numElems++;
-    } 
-    // Encontramos una celda nula
-    else{
-      tabla->numElems++;
-      tabla->elems[idx].dato = tabla->copia(dato);
-    }
-    
-    tabla->elems[idx].eliminado = 0;
-
+    colision_manage(tabla,idx, dato);
   }
 }
 
