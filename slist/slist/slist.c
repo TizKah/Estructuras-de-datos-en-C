@@ -29,7 +29,7 @@ SList slist_agregar_final(SList lista, int dato) {
 
   SList nodo = lista;
   for (;nodo->sig != NULL;nodo = nodo->sig);
-  /* ahora 'nodo' apunta al ultimo elemento en la lista */
+  /* Ahora 'nodo' apunta al ultimo elemento en la lista */
 
   nodo->sig = nuevoNodo;
   return lista;
@@ -61,6 +61,10 @@ void slist_concatenar(SList lista1, SList lista2){
 }
 
 SList slist_insertar(SList lista, int dato, int posicion){
+  if(posicion==0){
+    return slist_agregar_inicio(lista,dato);
+  }
+  
   int pos_actual = 1;
   SNodo *temp = lista;
   for(;temp!=NULL && pos_actual<posicion;temp=temp->sig, pos_actual++);
@@ -98,45 +102,35 @@ int slist_contiene(SList lista, int dato){
 
 int slist_indice(SList lista, int dato){
   SNodo *temp = lista;
-  int indice = 1;
+  int indice = 0;
   for(; temp!=NULL && temp->dato!=dato; temp=temp->sig, indice++);
   if(temp==NULL) return -1;
   return indice;
 }
 
 SList slist_intersecar(SList lista1, SList lista2){
-  if(lista1 == NULL || lista2 == NULL) return NULL;
-  
+  if(lista1 == NULL || lista2 == NULL) return NULL; 
 
   SNodo *lista_interseccion = slist_crear();
-
   SNodo *temp2 = lista2;
-  for(;temp2!=NULL; temp2=temp2->sig){
-    SNodo *temp1 = lista1;
-    for(;temp1!=NULL; temp1=temp1->sig){
-
-      if(temp1->dato == temp2->dato && !slist_contiene(lista_interseccion,temp1->dato)){
-        lista_interseccion = slist_agregar_inicio(lista_interseccion,temp1->dato);
-      }
+  for(;temp2!=NULL; temp2=temp2->sig){    
+    if(slist_contiene(lista1,temp2->dato) && !slist_contiene(lista_interseccion,temp2->dato)){
+        lista_interseccion = slist_agregar_inicio(lista_interseccion,temp2->dato);
     }
   }
 
   return lista_interseccion;
 }
 
-
-
 SList slist_intersecar_custom(SList lista1, SList lista2, FuncionCmp son_iguales){
   if(lista1 == NULL || lista2 == NULL) return NULL;
-  
 
   SNodo *lista_interseccion = slist_crear();
-
   SNodo *temp2 = lista2;
   for(;temp2!=NULL; temp2=temp2->sig){
+
     SNodo *temp1 = lista1;
     for(;temp1!=NULL; temp1=temp1->sig){
-
       if(son_iguales(temp1->dato, temp2->dato) && !slist_contiene(lista_interseccion,temp1->dato)){
         lista_interseccion = slist_agregar_inicio(lista_interseccion,temp1->dato);
       }
@@ -147,13 +141,13 @@ SList slist_intersecar_custom(SList lista1, SList lista2, FuncionCmp son_iguales
 }
 
 
-// Selection sort:
 void swap_data_slist(SList lista1, SList lista2){
   int temp_data = lista1->dato;
   lista1->dato = lista2->dato;
   lista2->dato = temp_data;
 }
 
+// Selection sort:
 SList slist_ordenar(SList lista, FuncionCmp funcion_comp){
   if(lista == NULL || lista->sig == NULL) return lista;
 
@@ -183,6 +177,7 @@ SList slist_reverso(SList lista, FuncionCmp funcion_comp){
   while(current!=NULL){
     next = current->sig;
     current->sig = prev;
+
     prev = current;
     current = next;
   }
@@ -196,21 +191,16 @@ SList slist_intercalar(SList lista1, SList lista2){
   SNodo *temp1 = lista1;
   SNodo *temp2 = lista2;
 
-  SList nueva_lista = NULL;
+  SList nueva_lista = slist_crear();
 
-  while(temp1!=NULL || temp2!=NULL){
-    if(temp1!=NULL) // -> temp2 !=NULL
+  while(temp1 || temp2){
+    if(temp1) // -> temp2 !=NULL
       nueva_lista = slist_agregar_final(nueva_lista, temp1->dato);
-    
-    if(temp2!=NULL)
-      nueva_lista = slist_agregar_final(nueva_lista, temp2->dato);
-    
-
-    if(temp2!=NULL)
-      temp2=temp2->sig; 
-    
-    if(temp1!=NULL)
       temp1=temp1->sig;
+    
+    if(temp2)
+      nueva_lista = slist_agregar_final(nueva_lista, temp2->dato);
+      temp2=temp2->sig;     
   }
   
   return nueva_lista;

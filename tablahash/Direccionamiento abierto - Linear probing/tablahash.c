@@ -162,6 +162,7 @@ void tablahash_insertar(TablaHash tabla, void *dato) {
   if (tabla->elems[idx].dato == NULL) {
     tabla->numElems++;
     tabla->elems[idx].dato = tabla->copia(dato);
+    tabla->elems[idx].eliminado = 0;
   }
   // Sobrescribir el dato si el mismo ya se encontraba en la tabla.
   else if (tabla->comp(tabla->elems[idx].dato, dato) == 0) {
@@ -184,7 +185,7 @@ void *tablahash_buscar(TablaHash tabla, void *dato) {
   unsigned idx = tabla->hash(dato) % tabla->capacidad;
 
   // Retornar NULL si la casilla estaba vacia.
-  if (tabla->elems[idx].dato == NULL)
+  if (tabla->elems[idx].dato == NULL && !tabla->elems[idx].eliminado)
     return NULL;
   
   // Retornar el dato de la casilla si hay concidencia.
@@ -216,12 +217,25 @@ void delete_data(TablaHash tabla, int idx){
  * Elimina el dato de la tabla que coincida con el dato dado.
  */
 void tablahash_eliminar(TablaHash tabla, void *dato) {
+  /* 
+    En esta función vamos primero a conseguir el índice del array de elementos en el que 
+    debería estar el dato. 
+    Luego evaluamos dos casos:
+    1 - No existe el elemento:
+        1.1 - La casilla inicial marcada por el índice está vacía.
+        1.2 - Luego de evaluar todo el cluster, seguimos sin encontrar el elemento.
+
+    2 - Existe el elemento:
+        2.1 - Encontramos el elemento en la casilla inicial.
+        2.2 - Lo encontramos dentro de un cluster:
+            2.2.1 - Evaluamos dentro del cluster hasta encontrar el elemento.
+  */
 
   // Calculamos la posicion del dato dado, de acuerdo a la funcion hash.
   unsigned idx = tabla->hash(dato) % tabla->capacidad;
 
   // Retornar si la casilla estaba vacia.
-  if (tabla->elems[idx].dato == NULL)
+  if (tabla->elems[idx].dato == NULL && !tabla->elems[idx].eliminado)
     return;
   
   if (tabla->comp(tabla->elems[idx].dato, dato) == 0) {

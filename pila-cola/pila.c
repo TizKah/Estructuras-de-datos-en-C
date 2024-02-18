@@ -32,12 +32,10 @@ void* pila_tope(Pila pila){
 }
 
 void pila_apilar(Pila pila, void *elemento){
-    //Create the new node
-    GNode *nodo_nuevo = malloc(sizeof(GNode*));
+    GNode *nodo_nuevo = malloc(sizeof(GNode));
     nodo_nuevo->data = pila->copy(elemento);
     nodo_nuevo->next = NULL;
 
-    //Add new node
     pila->ultimo->next = nodo_nuevo;
     pila->ultimo = nodo_nuevo;
 }
