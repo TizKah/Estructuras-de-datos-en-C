@@ -55,8 +55,10 @@ TablaHash tablahash_crear(unsigned capacidad, FuncionCopiadora copia,
 
 void tablahash_resize(TablaHash tabla){
   unsigned int nueva_capacidad = tabla->capacidad*2;
+  // Creamos una var auxiliar para guardar el array de elementos
   CasillaHash *old_array = tabla->elems;
 
+  // 'Reseteamos' el array de elementos, con el doble de capacidad anterior
   tabla->capacidad = nueva_capacidad;
   tabla->numElems = 0;
   tabla->elems = malloc(sizeof(CasillaHash) * tabla->capacidad);
@@ -106,6 +108,9 @@ void tablahash_destruir(TablaHash tabla) {
 }
 
 
+/* 
+  Maneja el caso de que se haya encontrado una colisión al momento de insertar un dato.
+ */
 void colision_manage(TablaHash tabla, int idx, void *dato){  
   // Tendremos que buscar la primer casilla libre a la que acudir para insertar el dato.
   // Es decir:
@@ -186,13 +191,25 @@ void *tablahash_buscar(TablaHash tabla, void *dato) {
   if (tabla->comp(tabla->elems[idx].dato, dato) == 0)
     return tabla->elems[idx].dato;
   
-  for(;tabla->elems[idx].dato!=NULL && (tabla->elems[idx].eliminado || tabla->comp(tabla->elems[idx].dato,dato)!=0);
+  // Paramos de buscar al encontrar una celda vacía o encontrar el dato.
+  for(;tabla->elems[idx].dato && 
+  (tabla->elems[idx].eliminado || tabla->comp(tabla->elems[idx].dato,dato)!=0);
   idx = (idx + 1) % tabla->capacidad);
     
-  if(tabla->elems[idx].dato!=NULL && tabla->comp(tabla->elems[idx].dato,dato)==0)
+  if(tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)==0)
     return tabla->elems[idx].dato;
 
   return NULL;
+}
+
+
+/* 
+  Función auxiliar para eliminar el dato de una casilla
+ */
+void delete_data(TablaHash tabla, int idx){
+  tabla->numElems--;
+  tabla->destr(tabla->elems[idx].dato);
+  tabla->elems[idx].dato = NULL;
 }
 
 /**
@@ -206,22 +223,19 @@ void tablahash_eliminar(TablaHash tabla, void *dato) {
   // Retornar si la casilla estaba vacia.
   if (tabla->elems[idx].dato == NULL)
     return;
-  // Vaciar la casilla si hay coincidencia.
   
   if (tabla->comp(tabla->elems[idx].dato, dato) == 0) {
-    tabla->numElems--;
-    tabla->destr(tabla->elems[idx].dato);
-    tabla->elems[idx].dato = NULL;
+    delete_data(tabla,idx);
   }
   else{
-    for(;tabla->elems[idx].dato!=NULL || 
-    (tabla->elems[idx].eliminado==1 && tabla->comp(tabla->elems[idx].dato,dato)!=0);
+    for(;tabla->elems[idx].eliminado || 
+    (tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)!=0);
     idx = (idx + 1) % tabla->capacidad);
     
-    if(tabla->elems[idx].dato!=NULL && tabla->comp(tabla->elems[idx].dato,dato)==0){
-      tabla->numElems--;
-      tabla->destr(tabla->elems[idx].dato);
-      tabla->elems[idx].dato = NULL;
+    if(tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)==0){
+      delete_data(tabla,idx);
     }
   }
 }
+
+

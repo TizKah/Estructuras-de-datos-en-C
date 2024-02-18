@@ -57,7 +57,7 @@ int main() {
 
   // Eliminar
   printf("\nEliminacion:\n");
-  for (int i = 5; i > 2; --i) {
+  for (int i = 5; i > 1; --i) {
     printf("Eliminando el contacto: ");
     contacto_imprimir(agenda[i]);
     puts("");

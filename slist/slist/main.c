@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "slist.h"
 
 static void imprimir_entero(int dato) {
@@ -37,101 +38,48 @@ int main(int argc, char *argv[]) {
   puts("");
 
   //Test slist_concatenar
-  puts("");
-  printf("LISTA CONCATENADA: ");
+  int suma_longitudes = (slist_longitud(lista) + slist_longitud(lista2));
   slist_concatenar(lista, lista2);
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
+  assert(slist_longitud(lista) == suma_longitudes);
 
   //Test slist_longitud
-  printf("Longitud de la lista concatenada: %d", slist_longitud(lista));
-  puts("");
+  assert(slist_longitud(lista) == 8);
 
   //Test slist_insertar
-  puts("");
-  printf("LISTA CON ELEMENTO INSERTADO: ");
   slist_insertar(lista, -5, 3);
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
+  assert(slist_contiene(lista, -5));
 
   //Test slist_eliminar
-  printf("LISTA CON ELEMENTO ELIMINADO: ");
-  slist_eliminar(&lista,3);
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
+  slist_eliminar(&lista,4);
+  assert(!slist_contiene(lista, -5));
 
   //Test slist_contiene
-  puts("");
-  printf("ESTÁ EL 3 EN LA LISTA: %d", slist_contiene(lista,3));
-  puts("");
-  printf("ESTÁ EL -5 EN LA LISTA: %d", slist_contiene(lista,-5));
-  puts("");
-  printf("ESTÁ EL -9 EN LA LISTA: %d", slist_contiene(lista,-9));
-  puts("");
+  assert(slist_contiene(lista, 3));
+  assert(!slist_contiene(lista, -9));
 
   //Test slist_indice
-  puts("");
-  printf("INDICE DEL 3 EN LA LISTA: %d", slist_indice(lista,3));
-  puts("");
-  printf("INDICE DEL -5 EN LA LISTA: %d", slist_indice(lista,-5));
-  puts("");
-  printf("INDICE DEL -9 EN LA LISTA: %d", slist_indice(lista,-9));
-  puts("");
+  assert(slist_indice(lista, 3) == 3);
+  assert(slist_indice(lista, -5) == -1);
+  assert(slist_indice(lista, -9) == -1);
 
   //Test slist_intersecar
-  puts("");
-  printf("INTERSECCIÓN DE LISTA 1 CON LISTA 2: ");
-  puts("");
   SList lista_interseccion = slist_intersecar(lista, lista2);
-  slist_recorrer(lista_interseccion, imprimir_entero);
-  puts("");
+  assert(slist_longitud(lista_interseccion) == 4);
 
   //Test slist_ordenar (selection sort)
-  puts("");
-  printf("LISTA DESORDENADA: ");
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
-  printf("LISTA ORDENADA: ");
-  slist_ordenar(lista,(*orden_natural));
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
+  slist_ordenar(lista, orden_natural);
+  assert(slist_indice(lista, 0) == 1);
 
   //Test slist_reverso
-  puts("");
-  printf("LISTA ORIGINAL: ");
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
-  printf("REVERSO DE LA LISTA: ");
-  lista = slist_reverso(lista, *orden_natural);
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
+  lista = slist_reverso(lista, orden_natural);
+  assert(slist_indice(lista, 0) == slist_longitud(lista));
 
   //Test slist_intercalar
-  puts("");
-  printf("LISTA 1: ");
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
-  printf("LISTA 2: ");
-  slist_recorrer(lista2, imprimir_entero);
-  puts("");
-  printf("LISTA INTERCALADA: ");
   SList lista_intercalar = slist_intercalar(lista, lista2);
-  slist_recorrer(lista_intercalar, imprimir_entero);
-  puts("");
-  
-  //Test slist_partir
-  puts("");
-  printf("LISTA: ");
-  slist_recorrer(lista, imprimir_entero);
-  puts("");
-  printf("--LISTA PARTIDA--\n");
-  SList segunda_lista = slist_partir(lista);
-  printf("PRIMER MITAD: ");
-  slist_recorrer(lista, imprimir_entero);
-  printf("SEGUNDA MITAD: ");
-  slist_recorrer(segunda_lista, imprimir_entero);
-  puts("");
+  assert(slist_longitud(lista_intercalar) == (slist_longitud(lista) + slist_longitud(lista2)));
 
+  //Test slist_partir
+  SList segunda_lista = slist_partir(lista_intercalar);
 
   slist_destruir(lista);
   slist_destruir(segunda_lista);

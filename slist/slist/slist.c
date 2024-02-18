@@ -1,5 +1,6 @@
 #include "slist.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 SList slist_crear() {
   return NULL;
@@ -66,7 +67,7 @@ SList slist_insertar(SList lista, int dato, int posicion){
   // Si temp == NULL entonces la posición es mayor a la longitud de la lista
   if(temp==NULL) return slist_agregar_final(lista, dato);
   
-  SNodo *nuevo_nodo = malloc(sizeof(SNodo*));
+  SNodo *nuevo_nodo = malloc(sizeof(SNodo));
   nuevo_nodo->dato = dato;
   nuevo_nodo->sig = temp->sig;
 
