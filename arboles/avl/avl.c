@@ -179,7 +179,7 @@ static AVL_Nodo* avl_nodo_insertar(AVL_Nodo* raiz, void* dato,
         raiz->izq = avl_nodo_rotacion_simple_izq(raiz->izq);
       
       // Caso 1:
-      // Se insertó en el subárbol derecho del hijo izquierdo
+      // Se insertó en el subárbol derecho del hijo izquierdo 
       raiz = avl_nodo_rotacion_simple_der(raiz); 
     }
     raiz->altura = 1 + avl_nodo_max_altura_hijos(raiz);
@@ -216,21 +216,30 @@ void avl_insertar(AVL arbol, void* dato) {
  * contrario.
  */
 static int avl_nodo_validar_abb(AVL_Nodo* raiz, void* min, void* max,
-  FuncionComparadora comp) {
-  // si la raiz es vacia, retornar exitosamente
-  if (raiz == NULL)
+  FuncionComparadora comp){
+
+  if(!raiz)
     return 1;
-  else {
-    // sino, validar intervalo
-    if (min != NULL && comp(raiz->dato, min) <= 0)
-      return 0;
-    if (max != NULL && comp(max, raiz->dato) <= 0)
-      return 0;
-    // y validar subarboles recursivamente
-    return (avl_nodo_validar_abb(raiz->izq, min, raiz->dato, comp) &&
-      avl_nodo_validar_abb(raiz->der, raiz->dato, max, comp));
-  }
+  
+  /* 
+    Si el nodo actual es hijo derecho de otro nodo y su valor es menor
+    al valor del padre entonces no se cumple la condición de ABB
+   */
+  if(min && comp(raiz->dato,min)<=0)
+    return 0;
+
+  /* 
+    Si el nodo actual es hijo izquierdo de otro nodo y su valor es mayor
+    al valor del padre entonces no se cumple la condición de ABB
+  */
+  if(max && comp(raiz->dato,max)>=0)
+    return 0;
+
+  return (avl_nodo_validar_abb(raiz->izq,min,raiz->dato,raiz->comp) &&
+  avl_nodo_validar_abb(raiz->izq,raiz->dato,max,raiz->comp));
+
 }
+
 static int avl_nodo_validar_altura_y_balance(AVL_Nodo* raiz) {
   // si la raiz es vacia, retornar exitosamente
   if (raiz == NULL)
@@ -273,3 +282,4 @@ void avl_recorrer(AVL arbol, AVLRecorrido orden, FuncionVisitanteExtra visita,
   void* extra) {
   avl_nodo_recorrer(arbol->raiz, orden, visita, extra);
 }
+
