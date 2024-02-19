@@ -171,18 +171,32 @@ static AVL_Nodo* avl_nodo_insertar(AVL_Nodo* raiz, void* dato,
   else if (comp(dato, raiz->dato) < 0) { // el dato debe ir en el subarbol izq
     raiz->izq = avl_nodo_insertar(raiz->izq, dato, copia, comp);
     // chequear balance
-    if (avl_nodo_factor_balance(raiz) == -2) {
-      // casos 1 o 2
-      if (avl_nodo_factor_balance(raiz->izq) == 1) // caso 2
+    if (avl_nodo_factor_balance(raiz) == -2) { // Se insertó en el hijo izquierdo
+
+      // Caso 2:
+      // Se insertó en el subárbol derecho del hijo izquierdo
+      if (avl_nodo_factor_balance(raiz->izq) == 1)
         raiz->izq = avl_nodo_rotacion_simple_izq(raiz->izq);
-      raiz = avl_nodo_rotacion_simple_der(raiz); // caso 1
+      
+      // Caso 1:
+      // Se insertó en el subárbol derecho del hijo izquierdo
+      raiz = avl_nodo_rotacion_simple_der(raiz); 
     }
     raiz->altura = 1 + avl_nodo_max_altura_hijos(raiz);
     return raiz;
   }
   else if (comp(raiz->dato, dato) < 0) { // el dato debe ir en el subarbol der
-    /** COMPLETAR */
-    assert(0);
+    raiz->der = avl_nodo_insertar(raiz->der, dato. copia, comp);
+
+    if(avl_nodo_factor_balance(raiz) == 2){
+
+      if(avl_nodo_factor_balance(raiz->der) == -1)
+        raiz->der = avl_nodo_rotacion_simple_der(raiz->der);
+
+      raiz = avl_nodo_rotacion_simple_izq(raiz);
+    }
+
+    raiz-> = 1 + avl_nodo_max_altura_hijos(raiz);
     return raiz;
   }
   else // no agregar elementos repetidos

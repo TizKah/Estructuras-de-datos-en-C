@@ -1,7 +1,7 @@
 #ifndef __PILA.H__
 #define __PILA.H__
 
-#include "glist.h"
+#include "../glist/glist/glist.h"
 
 
 struct _Pila
