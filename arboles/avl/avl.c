@@ -186,7 +186,7 @@ static AVL_Nodo* avl_nodo_insertar(AVL_Nodo* raiz, void* dato,
     return raiz;
   }
   else if (comp(raiz->dato, dato) < 0) { // el dato debe ir en el subarbol der
-    raiz->der = avl_nodo_insertar(raiz->der, dato. copia, comp);
+    raiz->der = avl_nodo_insertar(raiz->der, dato, copia, comp);
 
     if(avl_nodo_factor_balance(raiz) == 2){
 
@@ -196,7 +196,7 @@ static AVL_Nodo* avl_nodo_insertar(AVL_Nodo* raiz, void* dato,
       raiz = avl_nodo_rotacion_simple_izq(raiz);
     }
 
-    raiz-> = 1 + avl_nodo_max_altura_hijos(raiz);
+    raiz->altura = 1 + avl_nodo_max_altura_hijos(raiz);
     return raiz;
   }
   else // no agregar elementos repetidos
