@@ -1,4 +1,5 @@
 #include "btree.h"
+#include "cola.h"
 #include <assert.h>
 #include <stdlib.h>
 
@@ -164,24 +165,19 @@ void btree_recorrer_extra(BTree arbol, BTreeOrdenDeRecorrido orden,
 FuncionVisitanteExtra visit, void *extra){
   if(arbol==NULL) return;
   
-  switch (orden)
-  {
-  case BTREE_RECORRIDO_PRE: // raíz - izq - der
+
+  if(BTREE_RECORRIDO_PRE)
     visit(arbol->dato, extra);
-    btree_recorrer_extra(arbol->left, orden, visit, extra);
-    btree_recorrer_extra(arbol->right, orden, visit, extra);
-    break;
-  case BTREE_RECORRIDO_IN: // izq - raíz - der
-    btree_recorrer_extra(arbol->left, orden, visit, extra);
+
+  btree_recorrer_extra(arbol->left, orden, visit, extra);
+  
+  if(BTREE_RECORRIDO_IN)
     visit(arbol->dato, extra);
-    btree_recorrer_extra(arbol->right, orden, visit, extra);
-    break;
-  case BTREE_RECORRIDO_POST: // izq - der - raíz
-    btree_recorrer_extra(arbol->left, orden, visit, extra);
-    btree_recorrer_extra(arbol->right, orden, visit, extra);
+  
+  btree_recorrer_extra(arbol->right, orden, visit, extra);
+
+  if(BTREE_RECORRIDO_POST)
     visit(arbol->dato, extra);
-    break;
-  }
 
   return;
 };
@@ -195,8 +191,11 @@ int btree_sumar_extra(BTree arbol, FuncionVisitanteExtra visit){
   
 
 void btree_recorrer_bfs_recursivo_aux(BTree arbol, FuncionVisitante visit, int profundidad, int profundidad_actual){
-  if(not arbol) return;
-  if(profundidad==profundidad_actual) visit(arbol->dato);
+  if(not arbol) 
+    return;
+  
+  if(profundidad==profundidad_actual) 
+    visit(arbol->dato);
 
   btree_recorrer_bfs_recursivo_aux(arbol->left, visit, profundidad, profundidad_actual+1);
   btree_recorrer_bfs_recursivo_aux(arbol->right, visit, profundidad, profundidad_actual+1);
@@ -218,10 +217,20 @@ void btree_recorrer_bfs_iterativo(BTree arbol, FuncionVisitante visit){
 
   int cant_nodos = btree_nnodos(arbol);
 
-  BTree nodo_temp = arbol;
-  for(int nodos=0; nodos<cant_nodos; nodos++){
+  Cola queue = crear_queue();
+  queue_push(arbol);
+  BTree nodo_temp;
+  while(!queue_es_vacia(queue)){
+    nodo_temp = queue_pop(queue);
 
+    visit(nodo_temp->dato);
+
+    if(nodo_temp->left)
+      queue_push(queue, nodo_temp->left);
+    
+    if(nodo_temp->right)
+      queue_push(queue, nodo_temp->right);
   }
-
-
+  queue_free(queue);
+  return;
 };
