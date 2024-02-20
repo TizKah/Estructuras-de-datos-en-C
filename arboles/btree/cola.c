@@ -1,15 +1,16 @@
 #include "btree.h"
+#include "cola.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
 #define MAX_COLA 1000
 
-
 typedef struct {
   BTree elementos[MAX_COLA];
   int frente, final;
 } Cola;
+
 
 Cola* crear_cola() {
   Cola* nueva_cola = (Cola*)malloc(sizeof(Cola));
