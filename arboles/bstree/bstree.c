@@ -3,9 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-#define not NULL==
-
 /**
  * Estructura del nodo del arbol de busqueda binaria.
  * Tiene un puntero al dato (dato),
@@ -61,7 +58,8 @@ BSTree bstree_insertar(BSTree raiz, void *dato, FuncionCopiadora copia,
     nuevoNodo->dato = copia(dato);
     nuevoNodo->izq = nuevoNodo->der = NULL;
     return nuevoNodo;
-  } else if (comp(dato, raiz->dato) < 0) // dato < raiz->dato
+  }
+  if (comp(dato, raiz->dato) < 0) // dato < raiz->dato
     raiz->izq = bstree_insertar(raiz->izq, dato, copia, comp);
   else if (comp(dato, raiz->dato) > 0) // raiz->dato < dato
     raiz->der = bstree_insertar(raiz->der, dato, copia, comp);
