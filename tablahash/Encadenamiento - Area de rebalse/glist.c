@@ -25,6 +25,8 @@ void glist_destruir(GList list, FuncionDestructora destroy) {
     destroy(nodeToDelete->data);
     free(nodeToDelete);
   }
+  if(list && !list->data)
+    free(list);
 }
 
 /**
@@ -78,13 +80,17 @@ void* glist_buscar(GList list, void* dato, FuncionComparadora comp){
 GList glist_eliminar_dato(GList list, void* dato, FuncionComparadora comp, FuncionDestructora destr){
   GNode *nodo_temp = list;
 
-  if(nodo_temp->data && comp(nodo_temp->data,dato)==0){
+  if(nodo_temp->next && nodo_temp->data && comp(nodo_temp->data,dato)==0){
     destr(nodo_temp->data);
     nodo_temp->data = NULL;
-    if(nodo_temp->next)
-      return nodo_temp->next;
+    list = list->next;
     free(nodo_temp);
-    return glist_crear();
+    return list;
+  } 
+  else if (nodo_temp->data && comp(nodo_temp->data,dato)==0){
+    destr(nodo_temp->data);
+    nodo_temp->data = NULL;
+    return nodo_temp;
   }
   
   for(;nodo_temp->next && comp(nodo_temp->next->data,dato)!=0; 

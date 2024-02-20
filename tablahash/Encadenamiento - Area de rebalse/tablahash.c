@@ -92,8 +92,7 @@
 
     // Destruir cada uno de los datos.
     for (unsigned idx = 0; idx < tabla->capacidad; ++idx)
-      if (tabla->elems[idx]->data)
-        glist_destruir(tabla->elems[idx],tabla->destr);
+      glist_destruir(tabla->elems[idx],tabla->destr);
 
     // Liberar el arreglo de casillas y la tabla.
     free(tabla->elems);
