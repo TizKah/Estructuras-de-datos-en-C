@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 /**
- * Casillas en la que almacenaremos los datos de la tabla hash.
+ Casillas en la que almacenaremos los datos de la tabla hash.
    */
 typedef struct {
   void *dato;
@@ -12,7 +12,7 @@ typedef struct {
 } CasillaHash;
 
 /**
- * Estructura principal que representa la tabla hash.
+ Estructura principal que representa la tabla hash.
  */
 struct _TablaHash {
   CasillaHash *elems;
@@ -25,7 +25,7 @@ struct _TablaHash {
 };
 
 /**
- * Crea una nueva tabla hash vacia, con la capacidad dada.
+ Crea una nueva tabla hash vacia, con la capacidad dada.
  */
 TablaHash tablahash_crear(unsigned capacidad, FuncionCopiadora copia,
                           FuncionComparadora comp, FuncionDestructora destr,
@@ -83,17 +83,17 @@ void tablahash_resize(TablaHash tabla){
 }
 
 /**
- * Retorna el numero de elementos de la tabla.
+ Retorna el numero de elementos de la tabla.
  */
 int tablahash_nelems(TablaHash tabla) { return tabla->numElems; }
 
 /**
- * Retorna la capacidad de la tabla.
+ Retorna la capacidad de la tabla.
  */
 int tablahash_capacidad(TablaHash tabla) { return tabla->capacidad; }
 
 /**
- * Destruye la tabla.
+ Destruye la tabla.
  */
 void tablahash_destruir(TablaHash tabla) {
 
@@ -147,7 +147,7 @@ void colision_manage(TablaHash tabla, int idx, void *dato){
 }
 
 /**
- * Inserta un dato en la tabla, o lo reemplaza si ya se encontraba.
+ Inserta un dato en la tabla, o lo reemplaza si ya se encontraba.
  */
 void tablahash_insertar(TablaHash tabla, void *dato) {
 
@@ -176,8 +176,8 @@ void tablahash_insertar(TablaHash tabla, void *dato) {
 }
 
 /**
- * Retorna el dato de la tabla que coincida con el dato dado, o NULL si el dato
- * buscado no se encuentra en la tabla.
+ Retorna el dato de la tabla que coincida con el dato dado, o NULL si el dato
+ buscado no se encuentra en la tabla.
  */
 void *tablahash_buscar(TablaHash tabla, void *dato) {
 
@@ -193,8 +193,8 @@ void *tablahash_buscar(TablaHash tabla, void *dato) {
     return tabla->elems[idx].dato;
   
   // Paramos de buscar al encontrar una celda vacía o encontrar el dato.
-  for(;tabla->elems[idx].dato && 
-  (tabla->elems[idx].eliminado || tabla->comp(tabla->elems[idx].dato,dato)!=0);
+  for(;tabla->elems[idx].eliminado && 
+  (tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)!=0);
   idx = (idx + 1) % tabla->capacidad);
     
   if(tabla->elems[idx].dato && tabla->comp(tabla->elems[idx].dato,dato)==0)
@@ -214,7 +214,7 @@ void delete_data(TablaHash tabla, int idx){
 }
 
 /**
- * Elimina el dato de la tabla que coincida con el dato dado.
+ Elimina el dato de la tabla que coincida con el dato dado.
  */
 void tablahash_eliminar(TablaHash tabla, void *dato) {
   /* 
