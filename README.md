@@ -4,18 +4,18 @@ Implementaciones de estructuras de datos vistas en la universidad.
 
 ## Estructuras de Datos Implementadas
 
-### - Arrays
-### - Pila
-### - Cola
-### - Lista simplementa enlazada
-### - Lista doblemente enlazada
-### - Lista doblemente enlazada circular
-### - Cola de prioridad (heap)
-### - Árboles binarios
-### - Árboles generales
-### - Árboles binarios de búsqueda 
-### - Árboles binarios de búsqueda balanceado (AVL)
-### - Tabla hash
+##### - Arrays
+##### - Pila
+##### - Cola
+##### - Lista simplementa enlazada
+##### - Lista doblemente enlazada
+##### - Lista doblemente enlazada circular
+##### - Cola de prioridad (heap)
+##### - Árboles binarios
+##### - Árboles generales
+##### - Árboles binarios de búsqueda 
+##### - Árboles binarios de búsqueda balanceado (AVL)
+##### - Tabla hash
 
 # Estructuras de Datos en Python
 
