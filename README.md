@@ -17,15 +17,9 @@ Implementaciones de estructuras de datos vistas en la universidad.
       - De búsqueda balanceado (AVL)
   - Generales
   - Cola de prioridad (heap)
-  - 
-  - binarios de búsqueda balanceado (AVL)
 #### - Tabla hash
 
-# Estructuras de Datos en Python
 
-Implementaciones de estructuras de datos vistas en la universidad.
-
-## Estructuras de Datos Implementadas
 
 ### - Arrays
 
