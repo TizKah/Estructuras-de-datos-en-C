@@ -20,6 +20,7 @@ Implementaciones de estructuras de datos vistas en la universidad.
 #### - Tabla hash
 
 
+## Características
 
 ### - Arrays
 
