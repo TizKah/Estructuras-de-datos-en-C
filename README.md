@@ -1,4 +1,4 @@
-# Estructuras de Datos en Python
+# Estructuras de Datos en C
 
 Implementaciones de estructuras de datos vistas en la universidad.
 
