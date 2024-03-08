@@ -9,7 +9,7 @@ typedef void *(*FuncionCopiadora)(void *dato);
 typedef void *(*FuncionSwap)(BHeap heap, void* dato, void* dato1);
 
 typedef struct _BHeap {
-    void* *arr;
+    void* arr[];
     int capacidad;
     int ultimo;
     FuncionComparadora comp;
@@ -107,9 +107,8 @@ BHeap bheap_crear_desde_arr(void**arr, int largo, FuncionCopiadora copiar, Funci
     BHeap heap = malloc(sizeof(BHeap));
     heap->capacidad = largo;
     heap->comp = comp;
-    
+    heap->arr = arr;
 
-    
 
 }
 
