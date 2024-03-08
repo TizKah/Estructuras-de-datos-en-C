@@ -9,7 +9,7 @@ typedef struct _Cola
 
 };
 
-typedef _Cola *Cola;
+typedef _Cola DList;
 
 
 
