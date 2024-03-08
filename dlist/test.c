@@ -26,6 +26,9 @@ void int_visit(void* n){
 int main(int argc, char *argv[]){
     DList lista = DList_crear((FuncionComparadora)int_comp, (FuncionCopiadora)int_copy, 
     (FuncionDestructora)int_destroy, (FuncionVisitante)int_visit);
+    
+    DList lista1 = DList_crear((FuncionComparadora)int_comp, (FuncionCopiadora)int_copy, 
+    (FuncionDestructora)int_destroy, (FuncionVisitante)int_visit);
 
     if (lista == NULL) {
         fprintf(stderr, "Error al crear la lista\n");
@@ -55,6 +58,29 @@ int main(int argc, char *argv[]){
     DList_recorrer(lista);
     puts("");
     lista = DList_agregar_inicio(lista,arg4);
+    DList_recorrer(lista);
+    puts("");
+    puts("");
+
+    printf("Longitud de la lista: %d",DList_longitud(lista));
+    puts("");
+
+    lista1 = DList_agregar_final(lista1,arg3);
+    DList_recorrer(lista1);
+    puts("");
+    lista1 = DList_agregar_final(lista1,arg2);
+    DList_recorrer(lista1);
+    puts("");
+
+    lista1 = DList_agregar_inicio(lista1,arg1);
+    DList_recorrer(lista1);
+    puts("");
+    lista1 = DList_agregar_inicio(lista1,arg4);
+    DList_recorrer(lista1);
+    puts("");
+    puts("");
+
+    DList_concatenar(lista,lista1);
     DList_recorrer(lista);
     puts("");
 

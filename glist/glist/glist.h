@@ -39,6 +39,12 @@ int glist_vacia(GList lista);
  */
 GList glist_agregar_inicio(GList lista, void *dato, FuncionCopia copiar);
 
+GList glist_agregar_final(GList list, void *data, FuncionCopia copy);
+
+void* glist_buscar(GList list, void* dato, FuncionComparadora comp);
+
+void glist_eliminar_dato(GList list, void* dato, FuncionComparadora comp, FuncionDestructora destr);
+
 /**
  * Recorrido de la lista, utilizando la funcion pasada.
  */

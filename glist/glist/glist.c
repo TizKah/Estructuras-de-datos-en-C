@@ -34,8 +34,58 @@ GList glist_agregar_inicio(GList list, void *data, FuncionCopia copy) {
   GNode *newNode = malloc(sizeof(GNode));
   assert(newNode != NULL);
   newNode->next = list;
+  newNode->prev = NULL;
   newNode->data = copy(data);
   return newNode;
+}
+
+GList glist_agregar_final(GList list, void *data, FuncionCopia copy) {
+  GNode *newNode = malloc(sizeof(GNode));
+  newNode->data = copy(data);
+  newNode->next = NULL;
+
+  if (!list) {
+    newNode->prev = NULL;
+    return newNode;
+  }
+
+  GNode *nodo_temporal = list;
+  for(;nodo_temporal->next!=NULL;nodo_temporal=nodo_temporal->next);
+  nodo_temporal->next = newNode;
+  newNode->prev = nodo_temporal;
+  
+  return list;
+}
+
+
+void* glist_buscar(GList list, void* dato, FuncionComparadora comp){
+
+  GNode *nodo_temp = list;
+  for(;nodo_temp && comp(nodo_temp,dato)!=0; nodo_temp=nodo_temp->next);
+
+  if(nodo_temp)
+    return nodo_temp->data;
+
+  return NULL;
+}
+
+void glist_eliminar_dato(GList list, void* dato, FuncionComparadora comp, FuncionDestructora destr){
+
+  GNode *nodo_temp = list;
+  for(;nodo_temp && comp(nodo_temp,dato)!=0; nodo_temp=nodo_temp->next);
+
+  if(nodo_temp){
+    GNode *nodo_anterior = nodo_temp->prev;
+    if(nodo_anterior)
+      nodo_anterior->next = nodo_temp->next;
+    
+    if(nodo_temp->next)
+      nodo_temp->next->prev = nodo_anterior;
+
+    destr(nodo_temp->data);
+    free(nodo_temp);
+  }
+
 }
 
 /**

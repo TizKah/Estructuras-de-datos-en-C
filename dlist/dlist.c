@@ -100,20 +100,49 @@ void DList_recorrer(DList lista){
     }while(nodo_a_visitar && nodo_a_visitar!=lista->primero);
 }
 
-/* 
 int DList_longitud(DList lista){
+    if(!lista->primero)
+        return 0;
 
+    DNodo *nodo_temp = lista->primero;
+    int longitud = 0;
+    do{
+        longitud++;
+        nodo_temp=nodo_temp->sig;
+    }while(nodo_temp!=lista->primero);
+
+    return longitud;
 }
 
 void DList_concatenar(DList lista1, DList lista2){
+    if(!lista1){
+        lista1=lista2;
+        return;
+    }
+    if(!lista2)
+        return;
+    
+    lista1->ultimo->sig = lista2->primero;
+    lista2->primero->ant = lista1->ultimo;
 
+    lista2->ultimo->sig = lista1->primero;
+    lista1->primero->ant = lista2->ultimo;
+
+    free(lista2);
 }
 
 
 DList DList_insertar(DList lista, void* dato, int posicion){
+    DNodo *nodo_a_insertar = malloc(sizeof(struct _DNodo));
+    nodo_a_insertar->dato = lista->copy(dato);
+    
 
+
+    if(!lista->primero)
+        return 
 }
 
+/* 
 
 void DList_eliminar(DList *lista, int posicion){
 
