@@ -135,6 +135,7 @@ void colision_manage(TablaHash tabla, int idx, void *dato){
   // Si existe una casilla eliminada en el cluster    
   else if(tabla->elems[first_deleted].eliminado){
     tabla->elems[first_deleted].dato = tabla->copia(dato);
+    tabla->elems[first_deleted].eliminado = 0;
     tabla->numElems++;
   } 
   // Encontramos una celda nula
