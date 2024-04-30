@@ -1,0 +1,3 @@
+/home/tiza/Analizador/build/CMakeFiles/rebuild_cache.dir
+/home/tiza/Analizador/build/CMakeFiles/edit_cache.dir
+/home/tiza/Analizador/build/CMakeFiles/mi_ejecutable.dir

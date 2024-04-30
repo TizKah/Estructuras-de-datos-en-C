@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/mi_ejecutable.dir/dictionary.c.o CMakeFiles/mi_ejecutable.dir/hashtable.c.o CMakeFiles/mi_ejecutable.dir/word.c.o CMakeFiles/mi_ejecutable.dir/trie.c.o CMakeFiles/mi_ejecutable.dir/main.c.o  -o mi_ejecutable 
